@@ -1,0 +1,389 @@
+#include <conio.h>
+#include <cstdio>
+#include <iostream>
+#include <string.h>
+#include <cstdlib>
+#include<ctime>
+#include<stdio.h>
+#include<unistd.h>
+using namespace std;
+static int p=0;
+struct rabs
+{
+  char roomn[50], host[50], from[50], to[50], chair[8][4][10];
+    void empty();
+    int start,send,min;
+    void position(int i);
+};
+rabs sa[100];
+char str1[100];
+void vline(char ch)
+
+{
+
+  for (int i=80;i>0;i--){
+  cout<<ch;
+  }
+}
+void rabs::empty()
+
+{
+
+  for(int i=0; i<8;i++)
+
+  {
+
+    for(int j=0;j<4;j++)
+
+    {
+
+      strcpy(chair[i][j], "Empty");
+
+    }
+
+  }
+
+}
+void install()
+
+{
+
+  cout<<"Enter Room Number: ";
+
+  cin>>sa[p].roomn;
+ cin.ignore();
+  cout<<"\nEnter Host's Name: ";
+
+  gets(sa[p].host);
+  cout<<"\t\tPress Enter to continue.";
+ cin.ignore();
+  cout<<"\nFrom [DD/MM/YYYY]: \t";
+  gets(sa[p].from);
+    cout<<"\t\tPress Enter to continue.";
+cin.ignore();
+  cout<<"\nTo [DD/MM/YYYY]: \t";
+
+  gets(sa[p].to);
+    cout<<"\t\tPress Enter to continue.";
+cin.ignore();
+  cout<<"\nStart time [HH->1-24]: ";
+  cin>>sa[p].start;
+    
+  cin.ignore();
+  cout<<"\nEnd time [HH->1-24]: ";
+  cin>>sa[p].send;
+
+    cin.ignore();
+  sa[p].empty();
+ p++;
+ cout<<endl;
+}
+
+void allotment()
+
+{
+
+  int chair;
+
+  char number[100];
+
+  top:
+
+  cout<<"Room Number: ";
+
+  cin>>number;
+
+  int n;
+
+  for(n=0;n<=p;n++)
+
+  {
+
+    if(strcmp(sa[n].roomn, number)==0)
+{
+    break;
+}
+  }
+
+  while(n<=p)
+
+  {
+
+    cout<<"\nChair Number: ";
+
+    cin>>chair;
+
+    if(chair>32)
+
+    {
+
+      cout<<"\nThere are only 32 Chair's available in this Room !";
+
+    }
+
+    else
+
+    {
+
+    if (strcmp(sa[n].chair[chair/4][(chair%4)-1], "Empty")==0)
+
+      {
+
+        cout<<"Enter Name: ";
+     cin.ignore();
+        gets(sa[n].chair[chair/4][(chair%4)-1]);
+    cin.ignore();
+    
+        break;
+
+      }
+
+    else
+
+      cout<<"The Chair no. is already reserved.\n";
+
+      }
+
+      }
+
+    if(n>p)
+
+    {
+
+      cout<<"Enter correct Room number !!!\n";
+
+      goto top;
+
+    }
+
+  }
+void rabs::position(int l)
+{
+
+  int s=0;p=0;
+
+  for (int i =0; i<8;i++)
+
+  {
+
+    cout<<"\n";
+
+    for (int j = 0;j<4; j++)
+
+    {
+
+      s++;
+
+      if(strcmp(sa[l].chair[i][j], "Empty")==0)
+
+        {
+
+          cout.width(5);
+
+          cout.fill(' ');
+
+          cout<<s<<".";
+
+          cout.width(10);
+
+          cout.fill(' ');
+
+          cout<<sa[l].chair[i][j];
+
+          p++;
+
+        }
+
+        else
+
+        {
+
+        cout.width(5);
+
+        cout.fill(' ');
+
+        cout<<s<<".";
+
+        cout.width(10);
+
+        cout.fill(' ');
+
+        cout<<sa[l].chair[i][j];
+
+        }
+
+      }
+
+    }
+
+  cout<<"\n\nThere are "<<p<<" Chairs empty in Room No: "<<sa[l].roomn;
+  cout<<endl;
+  }
+void show()
+
+{
+  top:
+  int n;
+
+  char number[5];
+
+  cout<<"Enter Room no: ";
+
+  cin>>number;
+ cout<<endl;
+  for(n=0;n<=p;n++)
+
+  {
+
+    if(strcmp(sa[n].roomn, number)==0)
+
+    break;
+
+  }
+
+while(n<=p)
+
+{
+  vline('*');
+
+  cout<<"\n\t\tRoom no:\t"<<sa[n].roomn;
+    sa[n].min=sa[n].send - sa[n].start;
+  cout<<"\t(Occupied For "<<sa[n].min<<" Hrs)";
+  cout<<"\nHost: \t"<<sa[n].host<<"\t\tStart time: \t";
+if(((sa[n].start)>=1) && ((sa[n].start)<=12)){
+  cout<<sa[n].start<<" AM";
+  }else if(((sa[n].start)>=13) && ((sa[n].start)<=24)){
+    cout<<sa[n].start<<" PM";
+  }
+  cout<<"\t End time: \t";
+  if(((sa[n].send)>=1) && ((sa[n].send)<=12)){
+  cout<<sa[n].send<<" AM";
+  }else if(((sa[n].send)>=13) && ((sa[n].send)<=24)){
+    cout<<sa[n].send<<" PM";
+  }
+  cout<<"\nFrom: \t"<<sa[n].from<<"\t\tTo: \t"<<
+
+  sa[n].to<<"\n";
+
+  vline('*');
+
+  sa[n].position(n);
+
+  int a=1;
+
+  for (int i=0; i<8; i++)
+
+  {
+
+    for(int j=0;j<4;j++)
+
+    {
+
+      a++;
+
+      if(strcmp(sa[n].chair[i][j],"Empty")!=0)
+
+      cout<<"\nThe Chair no "<<(a-1)<<" is reserved for "<<sa[n].chair[i][j]<<".";
+
+    }
+  } cout<<endl;
+
+  break;
+
+  }
+
+  if(n>p)
+{
+    cout<<"Enter correct Room Number !!!\n\n";
+    goto top;
+}
+}
+
+
+void available()
+
+{ 
+  if(sa[p].roomn==NULL){
+  cout<<sizeof(rabs);
+  }
+  for(int n=0;n<=p;n++)
+
+  {
+    vline('*');
+
+    cout<<"\n\tRoom no:\t"<<sa[n].roomn;
+    sa[n].min=sa[n].send - sa[n].start;
+  cout<<"\t(Occupied For "<<sa[n].min<<" Hrs)";
+  cout<<"\nHost: \t"<<sa[n].host<<"\t\tStart time: \t";
+if(((sa[n].start)>=1) && ((sa[n].start)<=12)){
+  cout<<sa[n].start<<" AM";
+  }else if(((sa[n].start)>=13) && ((sa[n].start)<=24)){
+    cout<<sa[n].start<<" PM";
+  }
+  cout<<"\t End time: \t";
+  if(((sa[n].send)>=1) && ((sa[n].send)<=12)){
+  cout<<sa[n].send<<" AM";
+  }else if(((sa[n].send)>=13) && ((sa[n].send)<=24)){
+    cout<<sa[n].send<<" PM";
+  }
+  cout<<"\nFrom: \t"<<sa[n].from<<"\t\tTo: \t"<<
+
+  sa[n].to<<"\n";
+
+    vline('*');
+    cout<<endl;
+    vline('_');
+    cout<<endl;
+  }
+  cout<<endl<<endl;
+
+}
+
+int main()
+{
+system("cls");
+int w;
+rabs rabs;
+
+   time_t tmNow;
+    tmNow = time(NULL);
+    struct tm t = *localtime(&tmNow);
+    int year=t.tm_year+1900;
+    int day=t.tm_mday;
+    int month=t.tm_mon+1;
+do
+{
+  cout<<"\t\t\t"<<"Booking & Room Allotment\t";
+  cout<<"Date : "<<day<<"/"<<month<<"/"<<year;
+  cout<<"\n\n\n";
+  cout<<"\t\t\t1.Booking\n\t\t\t"
+  <<"2.Reservation\n\t\t\t"
+  <<"3.Show Data\n\t\t\t"
+  <<"4.Rooms Available \n\t\t\t"
+  <<"5.Exit";
+  cout<<"\n\t\t\tEnter your choice:-> ";
+
+  cin>>w;
+
+  switch(w)
+
+  {
+    case 1:  install();
+      break;
+    case 2:  allotment();
+      break;
+    case 3:  show();
+      break;
+    case 4:  available();
+      break;
+    case 5:  exit(1);
+    default:cout<<"Enter Correct Choice !!!\n";break;
+
+  }
+
+}
+while(w=5);
+
+return 0;
+
+}
